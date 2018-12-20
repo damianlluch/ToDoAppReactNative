@@ -1,5 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import {
+  StyleSheet, View, Text, AsyncStorage, Button,
+} from 'react-native';
 import Header from './Header';
 import Body from './Body';
 
@@ -13,7 +15,6 @@ export default class App extends React.Component {
   }
 
   establecerTexto = (value) => {
-    console.log(value);
     this.setState({ texto: value });
   }
 
@@ -31,6 +32,26 @@ export default class App extends React.Component {
     });
   }
 
+  guardarEnTelefono = () => {
+    AsyncStorage.setItem('@App:nombre', JSON.stringify([{ key: 1, texto: 'uno' }, { key: 2, texto: 'dos' }]))
+      .then((valor) => {
+        console.log(valor);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  recuperarEnTelefono = () => {
+    AsyncStorage.getItem('@App:nombre')
+      .then((valor) => {
+        console.log(valor);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -39,7 +60,14 @@ export default class App extends React.Component {
           cambiarTexto={this.establecerTexto}
           agregar={this.agregarTarea}
         />
-        <Text>{this.state.texto}</Text>
+        <Button
+          title="guardar"
+          onPress={() => { this.guardarEnTelefono(); }}
+        />
+        <Button
+          title="recuperar"
+          onPress={() => { this.recuperarEnTelefono(); }}
+        />
         <Body tareas={this.state.tareas} eliminar={this.eliminarTarea} />
       </View>
     );

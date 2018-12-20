@@ -46,6 +46,7 @@ export default class App extends React.Component {
     AsyncStorage.getItem('@App:nombre')
       .then((valor) => {
         console.log(valor);
+        console.log(JSON.parse(valor));
       })
       .catch((error) => {
         console.log(error);

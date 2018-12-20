@@ -10,7 +10,12 @@ class Body extends Component {
       <View style={styles.container}>
         <FlatList
           data={this.props.tareas}
-          renderItem={({ item }) => <Tarea item={item} />}
+          renderItem={({ item }) => (
+            <Tarea
+              item={item}
+              eliminar={this.props.eliminar}
+            />
+          )}
         />
       </View>
     );

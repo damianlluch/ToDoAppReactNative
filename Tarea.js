@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  StyleSheet, Text, View,
+  StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -10,7 +10,9 @@ class Tarea extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.texto}>{this.props.item.texto}</Text>
-        <Ionicons name="md-checkmark-circle" size={32} color="green" />
+        <TouchableOpacity onPress={() => { this.props.eliminar(this.props.item.key); }}>
+          <Ionicons name="md-trash" size={32} color="green" />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -20,6 +22,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#00ff00',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
   },
   texto: {
     fontSize: 24,

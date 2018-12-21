@@ -14,26 +14,34 @@ export default class App extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.recuperarEnTelefono();
+  }
+
+
   establecerTexto = (value) => {
     this.setState({ texto: value });
   }
 
   agregarTarea = () => {
+    const nuevasTareas = [...this.state.tareas, { texto: this.state.texto, key: Date.now() }];
+    this.guardarEnTelefono(nuevasTareas);
     this.setState({
-      tareas: [...this.state.tareas, { texto: this.state.texto, key: Date.now() }],
+      tareas: nuevasTareas,
       texto: '',
     });
   }
 
   eliminarTarea = (id) => {
     const nuevasTareas = this.state.tareas.filter(tarea => tarea.key !== id);
+    this.guardarEnTelefono(nuevasTareas);
     this.setState({
       tareas: nuevasTareas,
     });
   }
 
-  guardarEnTelefono = () => {
-    AsyncStorage.setItem('@App:nombre', JSON.stringify([{ key: 1, texto: 'uno' }, { key: 2, texto: 'dos' }]))
+  guardarEnTelefono = (tareas) => {
+    AsyncStorage.setItem('@App:tareas', JSON.stringify(tareas))
       .then((valor) => {
         console.log(valor);
       })
@@ -43,10 +51,16 @@ export default class App extends React.Component {
   }
 
   recuperarEnTelefono = () => {
-    AsyncStorage.getItem('@App:nombre')
+    AsyncStorage.getItem('@App:tareas')
       .then((valor) => {
         console.log(valor);
         console.log(JSON.parse(valor));
+        if (valor !== null) {
+          const nuevasTareas = JSON.parse(valor);
+          this.setState({
+            tareas: nuevasTareas,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
